@@ -1,5 +1,6 @@
 import { Bind, Body, Controller, Delete, Dependencies, Get, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs'
+import { AddTaskCommand } from '../commands/add/add-task.command';
 import { DeleteTaskCommand } from '../commands/delete/delete-task.command';
 import { UpdateTaskCommand } from '../commands/update/update-task.command';
 import { getAllTasksQuery } from '../queries/all/get-all-tasks.query';
@@ -30,7 +31,7 @@ export class TaskController{
         // return this.taskService.get(id)
         //     .then(results => response.status(201).json({results})) 
         //     .catch(error => response.status(401).json({message: 'An error has occurred : ' + error }))
-        return this.queryBus.execute(new getTasksQuery(id, response))
+        return this.queryBus.execute(new getTaskQuery(id, response))
     }
 
     @Post('add')
@@ -44,15 +45,15 @@ export class TaskController{
     }
 
     @Patch('update/:id')
-    @Bind(Body(), Param('id'), Res())
-    updateTask(updatedTask, response){
+    @Bind(Param('id'), Body(), Res())
+    updateTask(id, updatedTask, response){
         // return this.taskService.update(updatedTask, id)
         //     .then(response.status(201).json({
         //         results,
         //         message: `Task ${id} has updated successful !`
         //     }))
         //     .catch(error => response.status(401).json({message: 'An error has occurred : ' + error}))
-        return this.commandBus.execute(new UpdateTaskCommand(updatedTask, response))
+        return this.commandBus.execute(new UpdateTaskCommand(id, updatedTask, response))
     }
 
 
@@ -60,14 +61,15 @@ export class TaskController{
     @Bind(Param('id'), Query(), Res())
     deleteTask(id, query, response){
         id = parseInt(id)
-        query = query.split('#')
+        const tasks = query.tasks.split('#')
+        console.log(tasks)
         // return this.taskService.remove(query)
         //     .then(response.status(201).json({
         //         results, 
         //         results: "Task has deleted !"
         //     }))
         //     .catch(error => response.status(401).json({message: 'An error has occurred : ' + error}))
-        return this.commandBus.execute(new DeleteTaskCommand(query, response))
+        return this.commandBus.execute(new DeleteTaskCommand(tasks, response))
     }
 
 

@@ -13,7 +13,6 @@ export class GetAllTasksQueryHandler{
     }
     async execute(query){
         const { response } = query
-        console.log(response)
         return await this.repository.find()
             .then(results => response.status(201).json({results}))
             .catch(error => response.status(401).json({message: 'An error has occurred : ' + error }))

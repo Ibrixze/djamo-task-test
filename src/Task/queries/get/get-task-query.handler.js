@@ -11,8 +11,8 @@ export class GetTaskQueryHandler{
     constructor(repository){
         this.repository = repository
     }
-    async execute({id}){
-            console.log(id)
+    async execute(query){
+        const { id, response } = query
         return await this.repository.findOne(id)
             .then(results => response.status(201).json({results}))
             .catch(error => response.status(401).json({message: 'An error has occurred : ' + error }))

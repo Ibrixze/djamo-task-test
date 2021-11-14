@@ -1,10 +1,11 @@
 import { CommandHandler } from '@nestjs/cqrs'
 import { AddTaskCommand } from './add-task.command'
 import { getRepositoryToken } from '@nestjs/typeorm'
+import { Dependencies } from '@nestjs/common'
 import { TaskEntity } from '../../entities/task.entity'
 
 @CommandHandler(AddTaskCommand)
-// @Dependencies(getRepositoryToken(TaskEntity))
+@Dependencies(getRepositoryToken(TaskEntity))
 export class AddTaskCommandHandler{
     constructor(repository){
         this.repository = repository
