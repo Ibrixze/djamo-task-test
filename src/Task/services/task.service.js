@@ -1,7 +1,7 @@
 import { Injectable, Dependencies } from '@nestjs/common'
 import { getRepositoryToken } from '@nestjs/typeorm' 
-import { TaskEntity } from './entities/task.entity'
-import { TaskSchema } from './entities/task.schema'
+import { TaskEntity } from '../entities/task.entity'
+import { TaskSchema } from '../entities/task.schema'
  
 @Injectable()
 @Dependencies(getRepositoryToken(TaskEntity))
@@ -40,13 +40,16 @@ export class TaskService {
         return await this.tasksRepository.save(task)    
     }
 
-    // async update(datas, id){
-    //     id = parseInt(id)
-    //     return await this.tasksRepository.update(id, datas)
-    // }
+    async update(datas, id){
+        const task = this.tasksRepository.preload({id, ...datas})
+        if(!task)
+            throw new NotFoundException(`La tache avec l'id ${id} n'existe pas`)
+        return await this.tasksRepository.save(task)
+    }
 
-    async remove(id){
-        const task = await this.tasksRepository.findOne(id).then(result => result.json())
-       return await this.tasksRepository.remove(task)
+    async remove(query){
+        const preloadtasks = await this.tasksRepository.find()
+        const tasks = query.map(value => preloadtasks.filter(task => task.id === parseInt(value)))
+        return await this.tasksRepository.remove(tasks)
     }
 }

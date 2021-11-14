@@ -1,14 +1,21 @@
-import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { TaskEntity } from './entities/task.entity';
-import { TaskSchema } from './entities/task.schema';
-import {TaskController} from './task.controller';
-import { TaskService } from './task.service';
+import { CqrsModule } from '@nestjs/cqrs'
+import { TaskEntity } from './entities/task.entity'
+import { TaskSchema } from './entities/task.schema'
+import {TaskController} from './controllers/task.controller'
+import { TaskService } from './services/task.service'
+import { QueryHandlers } from './queries/index'
+import { CommandHandlers } from './commands/index'
 // import { TaskEntity } from './entities/task.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([TaskEntity])],
+    imports: [CqrsModule, TypeOrmModule.forFeature([TaskEntity])],
     controllers: [TaskController],
-    providers: [TaskService]
+    providers: [
+        TaskService,
+        ...QueryHandlers,
+        ...CommandHandlers
+    ]
 })
 export class TaskModule{}
