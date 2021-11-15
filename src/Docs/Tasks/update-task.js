@@ -15,6 +15,17 @@ export const updateTask = {
             description: "Id of task to be updated", // short desc.
           },
         ],
+        requestBody: {
+          // expected request body
+              content: {
+                  // content-type
+                  "application/json": {
+                      schema: {
+                          $ref: "#/components/schemas/TaskInput", // todo input data model
+                      },
+                  },
+              },
+          },
         // expected responses
         responses: {
           // response code

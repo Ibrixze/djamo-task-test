@@ -9,10 +9,10 @@ export const deleteTask = {
                 name: "tasks", // name of param
                 in: "query", // location of param
                 schema: {
-                    $ref: "task=1", // id model
+                    $ref: "", // id model
                 },
                 required: true, // mandatory
-                description: "Deleting a done task", // param desc
+                description: "Deleting a done task. If you want to delete many tasks, you should seperate id's by (-) tag. Example: http://localhost:3000/delete?tasks=1-2 ", // param desc
             },
         ],
         // expected responses

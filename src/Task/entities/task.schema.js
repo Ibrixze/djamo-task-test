@@ -13,8 +13,9 @@ export const TaskSchema = new EntitySchema({
         },
         task: {
             type: String,
+            nullable: false
         },
-        desciption: {
+        description: {
             type: String,
         }
     }
