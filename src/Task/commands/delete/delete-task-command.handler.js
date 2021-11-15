@@ -15,13 +15,19 @@ export class DeleteTaskCommandHandler{
         const { payload, response } = command
         
         const preloadtasks = await this.repository.find()
-        const tasks = preloadtasks.filter(task => payload.map(value => task.id === parseInt(value)))
+        let tasks = []
+        payload.map(value => {
+            const t = preloadtasks.filter(task => task.id == value)
+            tasks.push(...t)            
+        })
+        if(tasks.length === 0)
+            throw new NotFoundException('Resource(s) not found')
         return await this.repository.remove(tasks)
             .then(results => response.status(201).json({
                 results, 
                 results: "Task has deleted !"
             }))
-            .catch(error => response.status(401).json({message: 'An error has occurred : ' + error}))
+            .catch(error => response.status(401).json({message: `An error has occurred : ${error}`}))
     }
 
 

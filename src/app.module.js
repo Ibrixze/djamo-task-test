@@ -5,6 +5,8 @@ import { TaskModule } from './Task/task.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { TaskEntity } from './Task/entities/task.entity'
 import { TaskSchema } from './Task/entities/task.schema'
+import { ApiSwaggerMiddleware, ApiSwaggerSetupMiddleware } from './Docs/older-version/api-docs.middleware'
+import { ApiDocsModule } from './Docs/older-version/api-docs.module'
 
 @Module({
   imports: [
