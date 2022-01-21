@@ -21,13 +21,14 @@ export class DeleteTaskCommandHandler{
             tasks.push(...t)            
         })
         if(tasks.length === 0)
-            throw new NotFoundException('Resource(s) not found')
+            // throw new Error('Resource(s) you want to delete were not found')
+            return response.status(404).json({statusCode: 404, message: "Resource(s) you want to delete were not found"})
         return await this.repository.remove(tasks)
             .then(results => response.status(201).json({
                 results, 
                 results: "Task has deleted !"
             }))
-            .catch(error => response.status(401).json({message: `An error has occurred : ${error}`}))
+            .catch(error => response.status(404).json({message: `An error has occurred : ${error}`}))
     }
 
 

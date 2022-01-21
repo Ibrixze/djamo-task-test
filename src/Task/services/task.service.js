@@ -43,7 +43,13 @@ export class TaskService {
     async update(datas, id){
         const task = this.tasksRepository.preload({id, ...datas})
         if(!task)
-            throw new NotFoundException(`La tache avec l'id ${id} n'existe pas`)
+            
+            /** 
+             * creer un bus qui emmenera le message d'erreur au controller
+             *  du type : response.json({statusCode: 404, message: "La tache correspondant a l'id ${id} n'exite pas"}))
+             * 
+             * */
+            throw new Error(`La tache avec l'id ${id} n'existe pas`)
         return await this.tasksRepository.save(task)
     }
 

@@ -15,6 +15,6 @@ export class GetTaskQueryHandler{
         const { id, response } = query
         return await this.repository.findOne(id)
             .then(results => response.status(201).json({results}))
-            .catch(error => response.status(401).json({message: 'An error has occurred : ' + error }))
+            .catch(error => response.status(404).json({message: 'An error has occurred : ' + error }))
     }
 }
